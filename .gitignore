@@ -1,5 +1,6 @@
 # Environnement virtuel
 .venv/
+*.egg-info/
 
 # Variables d'environnement (contient des secrets)
 .env
