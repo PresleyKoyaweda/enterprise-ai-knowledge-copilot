@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     llm_model: str = "qwen3:8b"
     chroma_persist_dir: str = "./data/chroma"
     chroma_collection_name: str = "enterprise_knowledge"
+    jwt_secret_key: str = "change-me-in-production-please"
+    jwt_algorithm: str = "HS256"
+    jwt_access_token_expire_minutes: int = 60
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
