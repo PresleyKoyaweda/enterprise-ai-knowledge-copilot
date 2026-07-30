@@ -5,6 +5,7 @@ from app.agents.safety_agent import safety_agent
 from app.agents.retrieval_agent import retrieval_agent
 from app.agents.ranking_agent import ranking_agent
 from app.agents.answer_agent import answer_agent
+from app.agents.citation_agent import citation_agent
 
 
 def _route_after_safety(state: RAGState) -> str:
@@ -26,6 +27,7 @@ def build_rag_graph():
     graph.add_node("retrieval", retrieval_agent)
     graph.add_node("ranking", ranking_agent)
     graph.add_node("answer", answer_agent)
+    graph.add_node("citation", citation_agent)
 
     graph.set_entry_point("safety")
 
@@ -43,6 +45,7 @@ def build_rag_graph():
         {"answer": "answer", END: END},
     )
 
-    graph.add_edge("answer", END)
+    graph.add_edge("answer", "citation")
+    graph.add_edge("citation", END)
 
     return graph.compile()
