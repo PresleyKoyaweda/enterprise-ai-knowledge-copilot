@@ -14,11 +14,19 @@ def ask_question(request: QuestionRequest) -> QuestionResponse:
         "question": request.question,
         "is_safe": True,
         "rejection_reason": "",
+        "needs_rag": True,
+        "direct_answer": "",
         "context_chunks": [],
         "sources_metadata": [],
         "has_relevant_context": True,
         "answer": "",
     })
+
+    if not result["needs_rag"]:
+        return QuestionResponse(
+            answer=result["direct_answer"],
+            sources=[],
+        )
 
     if not result["is_safe"]:
         return QuestionResponse(

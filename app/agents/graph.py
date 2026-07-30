@@ -1,11 +1,18 @@
 from langgraph.graph import StateGraph, END
 
 from app.agents.state import RAGState
+from app.agents.planner_agent import planner_agent
 from app.agents.safety_agent import safety_agent
 from app.agents.retrieval_agent import retrieval_agent
 from app.agents.ranking_agent import ranking_agent
 from app.agents.answer_agent import answer_agent
 from app.agents.citation_agent import citation_agent
+
+
+def _route_after_planner(state: RAGState) -> str:
+    if state["needs_rag"]:
+        return "safety"
+    return END
 
 
 def _route_after_safety(state: RAGState) -> str:
@@ -23,13 +30,20 @@ def _route_after_ranking(state: RAGState) -> str:
 def build_rag_graph():
     graph = StateGraph(RAGState)
 
+    graph.add_node("planner", planner_agent)
     graph.add_node("safety", safety_agent)
     graph.add_node("retrieval", retrieval_agent)
     graph.add_node("ranking", ranking_agent)
     graph.add_node("answer", answer_agent)
     graph.add_node("citation", citation_agent)
 
-    graph.set_entry_point("safety")
+    graph.set_entry_point("planner")
+
+    graph.add_conditional_edges(
+        "planner",
+        _route_after_planner,
+        {"safety": "safety", END: END},
+    )
 
     graph.add_conditional_edges(
         "safety",
