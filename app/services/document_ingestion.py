@@ -2,6 +2,8 @@ from pathlib import Path
 
 from app.services.document_extraction import extract_text
 from app.services.text_chunking import chunk_text
+from app.services.embeddings import embed_chunks
+from app.db.vector_store import add_chunks
 
 UPLOAD_DIR = Path("data/uploads")
 
@@ -18,5 +20,8 @@ def ingest_document(filename: str, content: bytes) -> tuple[list[str], str]:
 
     text = extract_text(file_path)
     chunks = chunk_text(text)
+
+    embeddings = embed_chunks(chunks)
+    add_chunks(document_id=filename, chunks=chunks, embeddings=embeddings)
 
     return chunks, text

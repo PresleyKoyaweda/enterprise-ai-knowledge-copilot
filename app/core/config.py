@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     api_v1_prefix: str = "/api/v1"
     ollama_base_url: str = "http://localhost:11434"
     embedding_model: str = "bge-m3"
+    chroma_persist_dir: str = "./data/chroma"
+    chroma_collection_name: str = "enterprise_knowledge"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
