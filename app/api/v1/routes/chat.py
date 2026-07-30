@@ -16,12 +16,19 @@ def ask_question(request: QuestionRequest) -> QuestionResponse:
         "rejection_reason": "",
         "context_chunks": [],
         "sources_metadata": [],
+        "has_relevant_context": True,
         "answer": "",
     })
 
     if not result["is_safe"]:
         return QuestionResponse(
             answer=f"Question refusée : {result['rejection_reason']}",
+            sources=[],
+        )
+
+    if not result["has_relevant_context"]:
+        return QuestionResponse(
+            answer="Aucune information pertinente n'a été trouvée dans les documents disponibles pour répondre à cette question.",
             sources=[],
         )
 

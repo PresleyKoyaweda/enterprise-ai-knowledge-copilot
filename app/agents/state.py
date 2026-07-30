@@ -7,4 +7,5 @@ class RAGState(TypedDict):
     rejection_reason: str
     context_chunks: list[str]
     sources_metadata: list[dict]
+    has_relevant_context: bool
     answer: str
