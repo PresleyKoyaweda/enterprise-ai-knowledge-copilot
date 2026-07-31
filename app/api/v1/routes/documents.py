@@ -1,8 +1,10 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.document import DocumentUploadResponse
 from app.services.document_ingestion import ingest_document
 from app.core.dependencies import require_admin
+from app.db.session import get_db_session
 
 MAX_UPLOAD_SIZE_BYTES = 50 * 1024 * 1024  # 50 Mo
 
@@ -13,6 +15,7 @@ router = APIRouter()
 async def upload_document(
     file: UploadFile = File(...),
     current_user: dict = Depends(require_admin),
+    session: AsyncSession = Depends(get_db_session),
 ) -> DocumentUploadResponse:
     content = await file.read()
 
@@ -20,13 +23,14 @@ async def upload_document(
         raise HTTPException(status_code=413, detail="Fichier trop volumineux (max 50 Mo)")
 
     try:
-        chunks, text = ingest_document(file.filename, content)
+        result = await ingest_document(session, file.filename, content)
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
 
     return DocumentUploadResponse(
         filename=file.filename,
+        status=result["status"],
         size_bytes=len(content),
-        chunks_count=len(chunks),
-        preview=text[:300],
+        chunks_count=result["chunks_count"],
+        preview=result["preview"],
     )
