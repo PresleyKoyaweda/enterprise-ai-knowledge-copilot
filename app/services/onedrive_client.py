@@ -1,9 +1,11 @@
 import msal
+import requests
 
 from app.core.config import settings
 
-AUTHORITY = f"https://login.microsoftonline.com/{settings.ms_tenant_id}"
+AUTHORITY = "https://login.microsoftonline.com/consumers"
 SCOPES = ["Files.Read.All"]
+GRAPH_BASE_URL = "https://graph.microsoft.com/v1.0"
 
 
 def _get_msal_app() -> msal.PublicClientApplication:
@@ -29,3 +31,15 @@ def get_access_token() -> str:
         raise RuntimeError(f"Échec de l'authentification : {result.get('error_description')}")
 
     return result["access_token"]
+
+
+def list_files_in_folder(access_token: str, folder_name: str) -> list[dict]:
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    url = f"{GRAPH_BASE_URL}/me/drive/root:/{folder_name}:/children"
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+
+    items = response.json()["value"]
+
+    return [item for item in items if "file" in item]
