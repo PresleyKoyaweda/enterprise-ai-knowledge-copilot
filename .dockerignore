@@ -1,0 +1,27 @@
+# Environnement virtuel et cache Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets et config locale
+.env
+data/.msal_token_cache.json
+
+# Données locales (ne doivent pas être embarquées dans l'image)
+data/uploads/*
+data/chroma/*
+!data/uploads/.gitkeep
+!data/chroma/.gitkeep
+
+# Git
+.git/
+.gitignore
+
+# Tests
+tests/
+
+# Documentation
+README.md
