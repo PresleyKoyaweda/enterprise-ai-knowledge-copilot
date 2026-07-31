@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import msal
 import requests
 
@@ -6,17 +8,42 @@ from app.core.config import settings
 AUTHORITY = "https://login.microsoftonline.com/consumers"
 SCOPES = ["Files.Read.All"]
 GRAPH_BASE_URL = "https://graph.microsoft.com/v1.0"
+TOKEN_CACHE_PATH = Path("data/.msal_token_cache.json")
 
 
-def _get_msal_app() -> msal.PublicClientApplication:
+def _load_token_cache() -> msal.SerializableTokenCache:
+    cache = msal.SerializableTokenCache()
+
+    if TOKEN_CACHE_PATH.exists():
+        cache.deserialize(TOKEN_CACHE_PATH.read_text())
+
+    return cache
+
+
+def _save_token_cache(cache: msal.SerializableTokenCache) -> None:
+    if cache.has_state_changed:
+        TOKEN_CACHE_PATH.write_text(cache.serialize())
+
+
+def _get_msal_app(cache: msal.SerializableTokenCache) -> msal.PublicClientApplication:
     return msal.PublicClientApplication(
         client_id=settings.ms_client_id,
         authority=AUTHORITY,
+        token_cache=cache,
     )
 
 
 def get_access_token() -> str:
-    app = _get_msal_app()
+    cache = _load_token_cache()
+    app = _get_msal_app(cache)
+
+    accounts = app.get_accounts()
+
+    if accounts:
+        result = app.acquire_token_silent(SCOPES, account=accounts[0])
+        if result and "access_token" in result:
+            _save_token_cache(cache)
+            return result["access_token"]
 
     flow = app.initiate_device_flow(scopes=SCOPES)
 
@@ -29,6 +56,8 @@ def get_access_token() -> str:
 
     if "access_token" not in result:
         raise RuntimeError(f"Échec de l'authentification : {result.get('error_description')}")
+
+    _save_token_cache(cache)
 
     return result["access_token"]
 

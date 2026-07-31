@@ -22,3 +22,5 @@ data/chroma/*
 
 # OS
 .DS_Store
+
+data/.msal_token_cache.json
