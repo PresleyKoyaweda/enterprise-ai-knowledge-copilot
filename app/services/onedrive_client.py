@@ -43,3 +43,10 @@ def list_files_in_folder(access_token: str, folder_name: str) -> list[dict]:
     items = response.json()["value"]
 
     return [item for item in items if "file" in item]
+
+
+def download_file_content(file_item: dict) -> bytes:
+    download_url = file_item["@microsoft.graph.downloadUrl"]
+    response = requests.get(download_url)
+    response.raise_for_status()
+    return response.content
