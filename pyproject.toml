@@ -21,6 +21,7 @@ dependencies = [
     "sqlalchemy>=2.0.35",
     "asyncpg>=0.30.0",
     "greenlet>=3.1.0",
+    "msal>=1.31.0",
 ]
 
 [project.optional-dependencies]
