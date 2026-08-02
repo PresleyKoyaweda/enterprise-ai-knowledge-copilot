@@ -1,13 +1,9 @@
-import ollama
-
-from app.core.config import settings
-
-client = ollama.Client(host=settings.ollama_base_url)
+from app.services.embedding_provider import get_embedding_provider
 
 
 def embed_text(text: str) -> list[float]:
-    response = client.embeddings(model=settings.embedding_model, prompt=text)
-    return response["embedding"]
+    provider = get_embedding_provider()
+    return provider.embed(text)
 
 
 def embed_chunks(chunks: list[str]) -> list[list[float]]:

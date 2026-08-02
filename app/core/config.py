@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     llm_provider: str = "ollama"
     groq_api_key: str = ""
     groq_model: str = "llama-3.3-70b-versatile"
+    embedding_provider: str = "ollama"
+    hf_api_token: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
