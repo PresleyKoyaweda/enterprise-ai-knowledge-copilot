@@ -1,40 +1,28 @@
 from app.agents.state import RAGState
 from app.prompts.loader import load_prompt
-
-GREETING_PATTERNS = ["bonjour", "salut", "merci", "au revoir", "bonsoir", "hello"]
-
-CAPABILITY_PATTERNS = [
-    "que sais-tu faire",
-    "que sais tu faire",
-    "en quoi es-tu utile",
-    "en quoi tu es utile",
-    "à quoi tu sers",
-    "a quoi tu sers",
-    "c'est quoi ton rôle",
-    "quel est ton rôle",
-    "qui es-tu",
-    "qui es tu",
-    "que peux-tu faire",
-    "que peux tu faire",
-    "comment tu peux m'aider",
-    "comment peux-tu m'aider",
-]
+from app.services.llm_provider import get_llm_provider
 
 
-def _is_greeting(question: str) -> bool:
-    normalized = question.lower().strip()
-    return any(normalized.startswith(pattern) for pattern in GREETING_PATTERNS)
+def _classify_intent(question: str) -> str:
+    template = load_prompt("intent_classifier_v1")
+    prompt = template.format(question=question)
 
+    provider = get_llm_provider()
+    result = provider.generate(prompt)
 
-def _is_capability_question(question: str) -> bool:
-    normalized = question.lower().strip()
-    return any(pattern in normalized for pattern in CAPABILITY_PATTERNS)
+    intent = result.text.strip().lower()
+
+    if intent not in ("greeting", "capability", "content"):
+        return "content"
+
+    return intent
 
 
 def planner_agent(state: RAGState) -> RAGState:
     question = state["question"]
+    intent = _classify_intent(question)
 
-    if _is_greeting(question) or _is_capability_question(question):
+    if intent in ("greeting", "capability"):
         state["needs_rag"] = False
         state["direct_answer"] = load_prompt("greeting_v1")
         return state

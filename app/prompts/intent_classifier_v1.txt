@@ -1,0 +1,10 @@
+Tu dois classifier l'intention de la question suivante en UNE SEULE catégorie parmi :
+- greeting : salutation, politesse, remerciement (ex: "bonjour", "merci")
+- capability : question sur qui est l'agent, son rôle, ce qu'il sait faire ou comment il peut aider
+- content : toute question sur le contenu légal, la Loi 25, la protection des renseignements personnels
+
+Réponds UNIQUEMENT avec le mot exact de la catégorie (greeting, capability, ou content), sans aucun autre texte.
+
+Question : {question}
+
+Catégorie :

@@ -10,14 +10,14 @@ from app.agents.safety_agent import safety_agent
 from app.agents.state import RAGState
 
 
-def _route_after_planner(state: RAGState) -> str:
-    if state["needs_rag"]:
-        return "safety"
+def _route_after_safety(state: RAGState) -> str:
+    if state["is_safe"]:
+        return "planner"
     return END
 
 
-def _route_after_safety(state: RAGState) -> str:
-    if state["is_safe"]:
+def _route_after_planner(state: RAGState) -> str:
+    if state["needs_rag"]:
         return "retrieval"
     return END
 
@@ -31,25 +31,25 @@ def _route_after_ranking(state: RAGState) -> str:
 def build_rag_graph():
     graph = StateGraph(RAGState)
 
-    graph.add_node("planner", planner_agent)
     graph.add_node("safety", safety_agent)
+    graph.add_node("planner", planner_agent)
     graph.add_node("retrieval", retrieval_agent)
     graph.add_node("ranking", ranking_agent)
     graph.add_node("rerank", rerank_agent)
     graph.add_node("answer", answer_agent)
     graph.add_node("citation", citation_agent)
 
-    graph.set_entry_point("planner")
-
-    graph.add_conditional_edges(
-        "planner",
-        _route_after_planner,
-        {"safety": "safety", END: END},
-    )
+    graph.set_entry_point("safety")
 
     graph.add_conditional_edges(
         "safety",
         _route_after_safety,
+        {"planner": "planner", END: END},
+    )
+
+    graph.add_conditional_edges(
+        "planner",
+        _route_after_planner,
         {"retrieval": "retrieval", END: END},
     )
 
