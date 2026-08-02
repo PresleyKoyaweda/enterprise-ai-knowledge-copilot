@@ -1,0 +1,5 @@
+Voici les informations de base à transmettre à l'utilisateur :
+
+{base_message}
+
+Reformule ce message avec tes propres mots, en gardant exactement les mêmes informations (le rôle de l'agent et les 5 exemples de questions), mais avec une formulation différente à chaque fois. Reste naturel, chaleureux et concis, dans le style défini par ton rôle.
