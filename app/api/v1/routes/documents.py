@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-
 from app.core.dependencies import require_admin
 from app.db.session import get_db_session
 from app.models.document import DocumentUploadResponse
@@ -19,6 +18,9 @@ async def upload_document(
     session: AsyncSession = Depends(get_db_session),
 ) -> DocumentUploadResponse:
     content = await file.read()
+
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="Le fichier doit avoir un nom")
 
     if len(content) > MAX_UPLOAD_SIZE_BYTES:
         raise HTTPException(

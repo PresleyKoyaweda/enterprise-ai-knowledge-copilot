@@ -47,3 +47,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 ignore = ["B008"]
+
+[[tool.mypy.overrides]]
+module = ["msal.*", "jose.*", "passlib.*", "chromadb.*"]
+ignore_missing_imports = true

@@ -13,7 +13,7 @@ def _extract_from_pdf(file_path: Path) -> str:
 
 
 def _extract_from_docx(file_path: Path) -> str:
-    document = Document(file_path)
+    document = Document(str(file_path))
     paragraphs_text = [p.text for p in document.paragraphs]
     return "\n".join(paragraphs_text)
 

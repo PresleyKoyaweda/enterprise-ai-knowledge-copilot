@@ -18,13 +18,13 @@ def add_chunks(
     collection.add(
         ids=ids,
         documents=chunks,
-        embeddings=embeddings,
+        embeddings=embeddings,  # type: ignore[arg-type]
         metadatas=[{"document_id": document_id} for _ in chunks],
     )
 
 
-def search(query_embedding: list[float], top_k: int = 5) -> dict:
-    return collection.query(
-        query_embeddings=[query_embedding],
+def search(query_embedding: list[float], top_k: int = 5) -> dict:  # type: ignore[type-arg]
+    return collection.query(  # type: ignore[return-value]
+        query_embeddings=[query_embedding],  # type: ignore[arg-type]
         n_results=top_k,
     )
