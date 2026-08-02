@@ -1,23 +1,17 @@
 import ollama
 
-from app.agents.state import RAGState
 from app.core.config import settings
+from app.agents.state import RAGState
+from app.prompts.loader import load_prompt
 
 client = ollama.Client(host=settings.ollama_base_url)
 
 
 def _build_prompt(question: str, context_chunks: list[str]) -> str:
     context = "\n\n".join(context_chunks)
+    template = load_prompt("answer_v1")
 
-    return f"""Tu es un assistant qui répond aux questions en te basant UNIQUEMENT sur le contexte fourni ci-dessous.
-Si le contexte ne contient pas la réponse, dis clairement que tu ne sais pas.
-
-Contexte :
-{context}
-
-Question : {question}
-
-Réponse :"""
+    return template.format(context=context, question=question)
 
 
 def answer_agent(state: RAGState) -> RAGState:

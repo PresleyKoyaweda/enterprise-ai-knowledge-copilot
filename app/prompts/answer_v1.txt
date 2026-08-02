@@ -1,0 +1,9 @@
+Tu es un assistant qui répond aux questions en te basant UNIQUEMENT sur le contexte fourni ci-dessous.
+Si le contexte ne contient pas la réponse, dis clairement que tu ne sais pas.
+
+Contexte :
+{context}
+
+Question : {question}
+
+Réponse :
