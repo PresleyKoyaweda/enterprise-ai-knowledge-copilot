@@ -8,6 +8,8 @@ from app.services.document_extraction import extract_text
 from app.services.embeddings import embed_chunks
 from app.services.hashing import compute_content_hash
 
+from starlette.concurrency import run_in_threadpool
+
 ## from app.services.text_chunking import chunk_text ## on le remplace par un chunking hierarchique, la ligne suivante
 from app.services.hierarchical_chunking import hierarchical_chunk_text
 
@@ -39,7 +41,8 @@ async def ingest_document(session: AsyncSession, filename: str, content: bytes) 
     ##chunks = chunk_text(text)
     chunks = hierarchical_chunk_text(text)
 
-    embeddings = embed_chunks(chunks)
+    ## embeddings = embed_chunks(chunks)
+    embeddings = await run_in_threadpool(embed_chunks, chunks)
     add_chunks(document_id=filename, chunks=chunks, embeddings=embeddings)
 
     await upsert_document(
