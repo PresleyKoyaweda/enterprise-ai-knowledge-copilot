@@ -1,6 +1,6 @@
 from app.agents.state import RAGState
-from app.services.embeddings import embed_text
 from app.db.vector_store import search
+from app.services.embeddings import embed_text
 
 
 def retrieval_agent(state: RAGState) -> RAGState:

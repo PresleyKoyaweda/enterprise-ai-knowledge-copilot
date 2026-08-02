@@ -1,12 +1,12 @@
-from langgraph.graph import StateGraph, END
+from langgraph.graph import END, StateGraph
 
-from app.agents.state import RAGState
-from app.agents.planner_agent import planner_agent
-from app.agents.safety_agent import safety_agent
-from app.agents.retrieval_agent import retrieval_agent
-from app.agents.ranking_agent import ranking_agent
 from app.agents.answer_agent import answer_agent
 from app.agents.citation_agent import citation_agent
+from app.agents.planner_agent import planner_agent
+from app.agents.ranking_agent import ranking_agent
+from app.agents.retrieval_agent import retrieval_agent
+from app.agents.safety_agent import safety_agent
+from app.agents.state import RAGState
 
 
 def _route_after_planner(state: RAGState) -> str:

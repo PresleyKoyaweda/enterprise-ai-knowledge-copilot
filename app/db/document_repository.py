@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,8 +6,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.models import Document
 
 
-async def get_document_by_filename(session: AsyncSession, filename: str) -> Document | None:
-    result = await session.execute(select(Document).where(Document.filename == filename))
+async def get_document_by_filename(
+    session: AsyncSession, filename: str
+) -> Document | None:
+    result = await session.execute(
+        select(Document).where(Document.filename == filename)
+    )
     return result.scalar_one_or_none()
 
 
@@ -22,13 +26,13 @@ async def upsert_document(
     if existing:
         existing.content_hash = content_hash
         existing.chunks_count = chunks_count
-        existing.ingested_at = datetime.now(timezone.utc)
+        existing.ingested_at = datetime.now(UTC)
     else:
         existing = Document(
             filename=filename,
             content_hash=content_hash,
             chunks_count=chunks_count,
-            ingested_at=datetime.now(timezone.utc),
+            ingested_at=datetime.now(UTC),
         )
         session.add(existing)
 

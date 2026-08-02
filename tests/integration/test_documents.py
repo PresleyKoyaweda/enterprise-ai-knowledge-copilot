@@ -7,7 +7,9 @@ client = TestClient(app)
 
 
 def test_upload_document_without_token_returns_401():
-    response = client.post("/api/v1/documents", files={"file": ("test.txt", b"contenu", "text/plain")})
+    response = client.post(
+        "/api/v1/documents", files={"file": ("test.txt", b"contenu", "text/plain")}
+    )
 
     assert response.status_code == 401
 

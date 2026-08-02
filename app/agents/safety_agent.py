@@ -19,7 +19,9 @@ def safety_agent(state: RAGState) -> RAGState:
 
     if _is_prompt_injection_attempt(question):
         state["is_safe"] = False
-        state["rejection_reason"] = "La question contient une tentative de manipulation du système."
+        state["rejection_reason"] = (
+            "La question contient une tentative de manipulation du système."
+        )
         return state
 
     state["is_safe"] = True

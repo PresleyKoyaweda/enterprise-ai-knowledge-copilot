@@ -2,12 +2,12 @@ from pathlib import Path
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.db.document_repository import get_document_by_filename, upsert_document
+from app.db.vector_store import add_chunks
 from app.services.document_extraction import extract_text
-from app.services.text_chunking import chunk_text
 from app.services.embeddings import embed_chunks
 from app.services.hashing import compute_content_hash
-from app.db.vector_store import add_chunks
-from app.db.document_repository import get_document_by_filename, upsert_document
+from app.services.text_chunking import chunk_text
 
 UPLOAD_DIR = Path("data/uploads")
 

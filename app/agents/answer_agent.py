@@ -1,7 +1,7 @@
 import ollama
 
-from app.core.config import settings
 from app.agents.state import RAGState
+from app.core.config import settings
 
 client = ollama.Client(host=settings.ollama_base_url)
 

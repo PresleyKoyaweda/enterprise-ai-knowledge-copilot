@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
+from app.api.v1.routes import auth, chat, documents, health
 from app.core.config import settings
-from app.api.v1.routes import health, chat, documents, auth
 
 app = FastAPI(
     title=settings.app_name,
@@ -27,7 +27,7 @@ app.include_router(
 )
 
 app.include_router(
-    auth.router, 
-    prefix=settings.api_v1_prefix, 
+    auth.router,
+    prefix=settings.api_v1_prefix,
     tags=["auth"],
-    )
+)

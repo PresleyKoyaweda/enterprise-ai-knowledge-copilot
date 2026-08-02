@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import String, DateTime, Integer
+from sqlalchemy import DateTime, Integer, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -15,4 +15,6 @@ class Document(Base):
     filename: Mapped[str] = mapped_column(String(500), unique=True, nullable=False)
     content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     chunks_count: Mapped[int] = mapped_column(Integer, nullable=False)
-    ingested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    ingested_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False
+    )

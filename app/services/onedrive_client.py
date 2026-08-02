@@ -48,14 +48,18 @@ def get_access_token() -> str:
     flow = app.initiate_device_flow(scopes=SCOPES)
 
     if "user_code" not in flow:
-        raise RuntimeError("Impossible de démarrer le flux d'authentification Microsoft.")
+        raise RuntimeError(
+            "Impossible de démarrer le flux d'authentification Microsoft."
+        )
 
     print(flow["message"])
 
     result = app.acquire_token_by_device_flow(flow)
 
     if "access_token" not in result:
-        raise RuntimeError(f"Échec de l'authentification : {result.get('error_description')}")
+        raise RuntimeError(
+            f"Échec de l'authentification : {result.get('error_description')}"
+        )
 
     _save_token_cache(cache)
 

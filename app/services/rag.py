@@ -1,8 +1,8 @@
 import ollama
 
 from app.core.config import settings
-from app.services.embeddings import embed_text
 from app.db.vector_store import search
+from app.services.embeddings import embed_text
 
 client = ollama.Client(host=settings.ollama_base_url)
 

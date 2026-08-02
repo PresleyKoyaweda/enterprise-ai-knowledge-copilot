@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.models.chat import QuestionRequest, QuestionResponse, Source
 from app.agents.graph import build_rag_graph
+from app.models.chat import QuestionRequest, QuestionResponse, Source
 
 router = APIRouter()
 
@@ -10,17 +10,19 @@ rag_graph = build_rag_graph()
 
 @router.post("/ask", response_model=QuestionResponse)
 def ask_question(request: QuestionRequest) -> QuestionResponse:
-    result = rag_graph.invoke({
-        "question": request.question,
-        "is_safe": True,
-        "rejection_reason": "",
-        "needs_rag": True,
-        "direct_answer": "",
-        "context_chunks": [],
-        "sources_metadata": [],
-        "has_relevant_context": True,
-        "answer": "",
-    })
+    result = rag_graph.invoke(
+        {
+            "question": request.question,
+            "is_safe": True,
+            "rejection_reason": "",
+            "needs_rag": True,
+            "direct_answer": "",
+            "context_chunks": [],
+            "sources_metadata": [],
+            "has_relevant_context": True,
+            "answer": "",
+        }
+    )
 
     if not result["needs_rag"]:
         return QuestionResponse(
