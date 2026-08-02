@@ -1,10 +1,6 @@
-import ollama
-
-from app.core.config import settings
 from app.agents.state import RAGState
 from app.prompts.loader import load_prompt
-
-client = ollama.Client(host=settings.ollama_base_url)
+from app.services.llm_provider import get_llm_provider
 
 
 def _build_prompt(question: str, context_chunks: list[str]) -> str:
@@ -17,11 +13,7 @@ def _build_prompt(question: str, context_chunks: list[str]) -> str:
 def answer_agent(state: RAGState) -> RAGState:
     prompt = _build_prompt(state["question"], state["context_chunks"])
 
-    response = client.chat(
-        model=settings.llm_model,
-        messages=[{"role": "user", "content": prompt}],
-    )
-
-    state["answer"] = response["message"]["content"]
+    provider = get_llm_provider()
+    state["answer"] = provider.generate(prompt)
 
     return state

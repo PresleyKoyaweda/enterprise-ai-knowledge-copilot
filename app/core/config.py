@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     ms_client_id: str = ""
     ms_tenant_id: str = ""
     ms_client_secret: str = ""
+    llm_provider: str = "ollama"
+    groq_api_key: str = ""
+    groq_model: str = "llama-3.3-70b-versatile"
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
