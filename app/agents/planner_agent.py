@@ -1,4 +1,5 @@
 from app.agents.state import RAGState
+from app.prompts.loader import load_prompt
 
 GREETING_PATTERNS = ["bonjour", "salut", "merci", "au revoir", "bonsoir", "hello"]
 
@@ -13,10 +14,7 @@ def planner_agent(state: RAGState) -> RAGState:
 
     if _is_greeting(question):
         state["needs_rag"] = False
-        state["direct_answer"] = (
-            "Bonjour ! Je suis le copilote de connaissances de l'entreprise. "
-            "Posez-moi une question sur la documentation interne et je ferai de mon mieux pour y répondre."
-        )
+        state["direct_answer"] = load_prompt("greeting_v1")
         return state
 
     state["needs_rag"] = True

@@ -1,0 +1,10 @@
+Bonjour ! Je suis un agent IA spécialisé dans la Loi 25 (protection des renseignements personnels au Québec).
+
+Je peux vous aider avec des questions comme :
+- Dois-je réaliser une évaluation des facteurs relatifs à la vie privée (EFVP) pour mon projet ?
+- Que doit contenir ma politique de confidentialité ?
+- Quelles sont mes obligations en cas d'incident de confidentialité ?
+- Ai-je besoin du consentement explicite pour collecter telle donnée ?
+- Qui est responsable de la protection des renseignements personnels dans mon entreprise ?
+
+Posez-moi votre question !

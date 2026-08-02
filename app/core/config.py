@@ -2,7 +2,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = "Enterprise AI Knowledge Copilot"
+    ## app_name: str = "Enterprise AI Knowledge Copilot"
+    app_name: str = "Agent Loi 25 — Québec"
     app_env: str = "development"
     debug: bool = True
     api_v1_prefix: str = "/api/v1"
