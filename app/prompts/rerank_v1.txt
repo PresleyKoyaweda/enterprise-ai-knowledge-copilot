@@ -1,0 +1,9 @@
+Tu es un évaluateur de pertinence. Note de 0 à 10 à quel point le passage ci-dessous permet de répondre à la question posée.
+Réponds UNIQUEMENT avec un nombre entier entre 0 et 10, sans aucun autre texte.
+
+Question : {question}
+
+Passage :
+{chunk}
+
+Note :
