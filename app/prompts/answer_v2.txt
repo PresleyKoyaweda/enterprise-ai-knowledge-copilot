@@ -1,0 +1,6 @@
+Contexte :
+{context}
+
+Question : {question}
+
+Réponds à la question en te basant sur le contexte ci-dessus, en respectant ton rôle et ton style.
