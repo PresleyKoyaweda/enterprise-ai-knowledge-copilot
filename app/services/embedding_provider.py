@@ -1,11 +1,9 @@
 from abc import ABC, abstractmethod
 
 import ollama
-import requests
+from huggingface_hub import InferenceClient
 
 from app.core.config import settings
-
-HF_API_URL = "https://api-inference.huggingface.co/models/BAAI/bge-m3"
 
 
 class EmbeddingProvider(ABC):
@@ -24,16 +22,11 @@ class OllamaEmbeddingProvider(EmbeddingProvider):
 
 class HuggingFaceEmbeddingProvider(EmbeddingProvider):
     def __init__(self) -> None:
-        self.headers = {"Authorization": f"Bearer {settings.hf_api_token}"}
+        self.client = InferenceClient(token=settings.hf_api_token)
 
     def embed(self, text: str) -> list[float]:
-        response = requests.post(
-            HF_API_URL,
-            headers=self.headers,
-            json={"inputs": text},
-        )
-        response.raise_for_status()
-        return response.json()
+        result = self.client.feature_extraction(text, model="BAAI/bge-m3")
+        return result.tolist()
 
 
 def get_embedding_provider() -> EmbeddingProvider:
