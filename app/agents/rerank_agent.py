@@ -28,13 +28,18 @@ def rerank_agent(state: RAGState) -> RAGState:
     chunks = state["context_chunks"]
     sources = state["sources_metadata"]
 
-    scored = [(chunk, source, _score_chunk(question, chunk)) for chunk, source in zip(chunks, sources)]
+    scored = [
+        (chunk, source, _score_chunk(question, chunk))
+        for chunk, source in zip(chunks, sources)
+    ]
 
     scored.sort(key=lambda item: item[2], reverse=True)
 
     top_items = scored[:TOP_N_AFTER_RERANK]
 
     state["context_chunks"] = [chunk for chunk, _, _ in top_items]
-    state["sources_metadata"] = [{**source, "rerank_score": score} for _, source, score in top_items]
+    state["sources_metadata"] = [
+        {**source, "rerank_score": score} for _, source, score in top_items
+    ]
 
     return state
