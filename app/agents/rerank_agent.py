@@ -12,9 +12,9 @@ def _score_chunk(question: str, chunk: str) -> int:
     prompt = template.format(question=question, chunk=chunk)
 
     provider = get_llm_provider()
-    raw_response = provider.generate(prompt)
+    result = provider.generate(prompt)
 
-    match = re.search(r"\d+", raw_response)
+    match = re.search(r"\d+", result.text)
 
     if not match:
         return 0
@@ -28,9 +28,7 @@ def rerank_agent(state: RAGState) -> RAGState:
     chunks = state["context_chunks"]
     sources = state["sources_metadata"]
 
-    scored = [
-        (chunk, source, _score_chunk(question, chunk)) for chunk, source in zip(chunks, sources)
-    ]
+    scored = [(chunk, source, _score_chunk(question, chunk)) for chunk, source in zip(chunks, sources)]
 
     scored.sort(key=lambda item: item[2], reverse=True)
 

@@ -45,8 +45,8 @@ class GroqProvider(LLMProvider):
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
 
-        response = self.client.chat.completions.create(model=settings.groq_model, messages=messages)
-        text = response.choices[0].message.content
+        response = self.client.chat.completions.create(model=settings.groq_model, messages=messages)  # type: ignore[arg-type]
+        text = response.choices[0].message.content or ""
         tokens = response.usage.total_tokens if response.usage else None
         return LLMResult(text=text, tokens_used=tokens)
 
